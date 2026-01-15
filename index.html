@@ -142,7 +142,7 @@
 
 <div class="no-print">
     <button class="btn btn-print" onclick="window.print()">Imprimir</button>
-    <button class="btn btn-pdf" onclick="generatePDF()">Salvar em PDF</button>
+    
 </div>
 
 <script>
@@ -164,19 +164,9 @@
     const canvas = document.getElementById('signature-pad');
     const signaturePad = new SignaturePad(canvas);
 
-    // Função de Geração de PDF
-    function generatePDF() {
-        const element = document.getElementById('report-content');
-        const opt = {
-            margin: 5,
-            filename: 'Relatorio_Gold_Alinhamento.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
-    }
+   
 </script>
 
 </body>
 </html>
+
