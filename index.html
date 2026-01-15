@@ -11,17 +11,20 @@
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; color: #333; }
         .container { max-width: 900px; background: white; padding: 30px; margin: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
         .header { text-align: center; border-bottom: 4px solid var(--accent-color); padding-bottom: 20px; margin-bottom: 20px; }
-        .logo-gold { max-width: 280px; height: auto; margin-bottom: 10px; }
-        h1 { color: var(--primary-color); margin: 0; font-size: 24px; text-transform: uppercase; }
+        .logo-gold { max-width: 250px; height: auto; margin-bottom: 10px; }
+        h1 { color: var(--primary-color); margin: 0; font-size: 24px; text-transform: uppercase; text-align: center; width: 100%; }
         h3 { background-color: var(--primary-color); color: white; padding: 10px; font-size: 16px; border-radius: 4px; margin-top: 20px; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 15px; }
-        .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; margin-top: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
         label { font-weight: bold; font-size: 11px; color: #666; display: block; margin-bottom: 4px; text-transform: uppercase; }
         input { width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
-        .img-box { position: relative; border: 1px solid #eee; padding: 10px; text-align: center; border-radius: 4px; background: #fff; }
-        .img-box img { max-width: 100%; height: auto; }
-        .dim-inputs { display: flex; justify-content: space-around; margin-top: 10px; }
-        .soft-foot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        
+        /* Estilo para a nova Seção de Configuração */
+        .config-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
+        .config-card { border: 1px solid #ddd; padding: 15px; border-radius: 6px; text-align: center; background: #fff; }
+        .config-card img { max-width: 100%; height: auto; margin-bottom: 10px; border-radius: 4px; }
+        .dim-fields { display: flex; justify-content: space-around; gap: 5px; }
+        .softfoot-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
         table { width: 100%; border-collapse: collapse; margin: 15px 0; }
         th, td { border: 1px solid #333; padding: 8px; text-align: center; }
         th { background-color: #f8f9fa; color: var(--primary-color); font-size: 12px; }
@@ -42,7 +45,7 @@
 
     <div class="grid">
         <div>
-            <label>Cliente / Local</label>
+            <label>Cliente / Unidade</label>
             <input type="text" value="ETE-KLABIN / ORTIGUEIRA">
             <label>Equipamento / TAG</label>
             <input type="text" value="36112-P-2139">
@@ -50,78 +53,78 @@
         <div>
             <label>Técnico Responsável</label>
             <input type="text" value="ANDRE MAURICIO">
-            <label>Data</label>
+            <label>Data da Execução</label>
             <input type="date" id="data-atual">
         </div>
     </div>
 
-    <h3>Configuração</h3>
-    <div class="config-grid">
-        <div class="img-box">
-            <label>Dimensões do Equipamento (mm)</label>
-            <img src="https://raw.githubusercontent.com/Gold-Reformes/alinhamento-laser/main/dimensoes_maq.png" alt="Dimensões A B C">
-            <div class="dim-inputs">
+    <h3>Configuração do Equipamento</h3>
+    <div class="config-section">
+        <div class="config-card">
+            <label>Dimensões da Máquina (mm)</label>
+            <img src="https://raw.githubusercontent.com/Gold-Reformes/alinhamento-laser/main/dimensoes.png" alt="Esquema Dimensões">
+            <div class="dim-fields">
                 <div><label>A</label><input type="number" placeholder="mm"></div>
                 <div><label>B</label><input type="number" placeholder="mm"></div>
                 <div><label>C</label><input type="number" placeholder="mm"></div>
             </div>
         </div>
 
-        <div class="img-box">
-            <label>Correção de Pé Manco (Soft Foot)</label>
+        <div class="config-card">
+            <label>Correção de Pé Manco (mm)</label>
             <img src="https://raw.githubusercontent.com/Gold-Reformes/alinhamento-laser/main/pe_manco.png" alt="Esquema Pé Manco">
-            <div class="soft-foot-grid">
-                <input type="number" placeholder="Pé 1 (mm)">
-                <input type="number" placeholder="Pé 2 (mm)">
-                <input type="number" placeholder="Pé 3 (mm)">
-                <input type="number" placeholder="Pé 4 (mm)">
+            <div class="softfoot-fields">
+                <input type="number" placeholder="Pé 1">
+                <input type="number" placeholder="Pé 2">
+                <input type="number" placeholder="Pé 3">
+                <input type="number" placeholder="Pé 4">
             </div>
         </div>
     </div>
 
-    <h3>1. Leituras de Alinhamento (Acoplamento)</h3>
+    <h3>1. Leituras Finais (Acoplamento)</h3>
     <table>
         <thead>
             <tr>
-                <th>Posição</th>
-                <th>Radial / Offset (B)</th>
-                <th>Angular (A)</th>
+                <th>Posição da Medição</th>
+                <th>Radial / Offset (mm)</th>
+                <th>Angular / Gap (mm)</th>
             </tr>
         </thead>
         <tbody>
-            <tr><td><strong>0° (Vertical)</strong></td><td><input type="number" step="0.01" value="0.09"></td><td><input type="number" step="0.01" value="0.08"></td></tr>
-            <tr><td><strong>90° (Horizontal)</strong></td><td><input type="number" step="0.01" value="0.09"></td><td><input type="number" step="0.01" value="0.10"></td></tr>
+            <tr><td><strong>Vertical (0° - 180°)</strong></td><td><input type="number" step="0.01" value="0.09"></td><td><input type="number" step="0.01" value="0.08"></td></tr>
+            <tr><td><strong>Horizontal (90° - 270°)</strong></td><td><input type="number" step="0.01" value="0.09"></td><td><input type="number" step="0.01" value="0.10"></td></tr>
         </tbody>
     </table>
 
-    <h3>2. Compensação de Pés e Calços (Shims)</h3>
+    <h3>2. Calços Instalados (Shims)</h3>
     <table>
         <thead>
-            <tr><th>Pé</th><th>Qtd Shims</th><th>Espessura Total (mm)</th></tr>
+            <tr><th>Localização</th><th>Quantidade</th><th>Espessura Total (mm)</th></tr>
         </thead>
         <tbody>
-            <tr><td>PÉ 1</td><td><input type="number" value="3"></td><td><input type="number" step="0.01" value="3.20"></td></tr>
-            <tr><td>PÉ 2</td><td><input type="number" value="4"></td><td><input type="number" step="0.01" value="3.30"></td></tr>
-            <tr><td>PÉ 3</td><td><input type="number" value="3"></td><td><input type="number" step="0.01" value="3.20"></td></tr>
-            <tr><td>PÉ 4</td><td><input type="number" value="4"></td><td><input type="number" step="0.01" value="3.30"></td></tr>
+            <tr><td>Pé 1 (Frontal Esq)</td><td><input type="number" value="3"></td><td><input type="number" step="0.01" value="3.20"></td></tr>
+            <tr><td>Pé 2 (Frontal Dir)</td><td><input type="number" value="4"></td><td><input type="number" step="0.01" value="3.30"></td></tr>
+            <tr><td>Pé 3 (Traseiro Esq)</td><td><input type="number" value="3"></td><td><input type="number" step="0.01" value="3.20"></td></tr>
+            <tr><td>Pé 4 (Traseiro Dir)</td><td><input type="number" value="4"></td><td><input type="number" step="0.01" value="3.30"></td></tr>
         </tbody>
     </table>
 
     <div class="grid" style="margin-top:20px;">
         <div>
-            <label>Observações e Laudo</label>
-            <textarea rows="4"></textarea>
+            <label>Observações Técnicas</label>
+            <textarea rows="5" style="width:100%; border-radius:4px; border:1px solid #bdc3c7;"></textarea>
         </div>
         <div>
-            <label>Assinatura do Cliente</label>
+            <label>Assinatura Digital do Cliente</label>
             <canvas id="signature-pad"></canvas>
-            <button class="btn" style="font-size:10px; padding:5px;" onclick="signaturePad.clear()">Limpar</button>
+            <button class="btn" style="font-size:10px; padding:5px; margin-top:5px;" onclick="signaturePad.clear()">Limpar Assinatura</button>
         </div>
     </div>
 </div>
 
 <div class="no-print">
-    <button class="btn btn-pdf" onclick="generatePDF()">Gerar Relatório em PDF</button>
+    <button class="btn btn-pdf" onclick="generatePDF()">Gerar PDF Profissional</button>
 </div>
 
 <script>
@@ -131,7 +134,13 @@
     
     function generatePDF() {
         const element = document.getElementById('report-content');
-        html2pdf().set({ margin: 5, filename: 'Relatorio_Gold.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' } }).from(element).save();
+        html2pdf().set({ 
+            margin: 5, 
+            filename: 'Relatorio_Gold_Alinhamento.pdf', 
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 }, 
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+        }).from(element).save();
     }
 </script>
 </body>
