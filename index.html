@@ -5,152 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Alinhamento - Gold Soluções</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
         :root { --primary-color: #003366; --accent-color: #FFD700; --bg-color: #f4f7f9; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 850px; background: white; padding: 40px; margin: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-        
-        /* Cabeçalho Centralizado conforme solicitado */
-        .header { text-align: center; border-bottom: 4px solid var(--accent-color); padding-bottom: 20px; margin-bottom: 30px; }
-        .logo-gold { max-width: 280px; height: auto; margin-bottom: 15px; }
-        h1 { color: var(--primary-color); margin: 0; font-size: 26px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .field-group { margin-bottom: 10px; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; background: white; padding: 30px; margin: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+        .header { text-align: center; border-bottom: 4px solid var(--accent-color); padding-bottom: 20px; margin-bottom: 20px; }
+        .logo-gold { max-width: 280px; height: auto; margin-bottom: 10px; }
+        h1 { color: var(--primary-color); margin: 0; font-size: 24px; text-transform: uppercase; }
+        h3 { background-color: var(--primary-color); color: white; padding: 10px; font-size: 16px; border-radius: 4px; margin-top: 20px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 15px; }
+        .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; margin-top: 15px; }
         label { font-weight: bold; font-size: 11px; color: #666; display: block; margin-bottom: 4px; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 14px; box-sizing: border-box; background-color: #fff; }
-        
-        h3 { background-color: var(--primary-color); color: white; padding: 8px 15px; font-size: 16px; border-radius: 4px; margin-top: 25px; }
-        
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; background: white; }
-        th, td { border: 1px solid #333; padding: 12px; text-align: center; font-size: 13px; }
-        th { background-color: #f8f9fa; font-weight: bold; color: var(--primary-color); }
-        
-        .photo-section { border: 2px dashed var(--primary-color); padding: 20px; text-align: center; margin-top: 25px; border-radius: 6px; background: #fdfdfd; }
-        #preview { max-width: 100%; max-height: 400px; margin-top: 15px; display: none; border: 1px solid #ddd; border-radius: 4px; }
-        
-        .no-print { display: flex; gap: 15px; justify-content: center; margin-top: 40px; padding-bottom: 30px; }
-        .btn { padding: 14px 28px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; transition: all 0.3s ease; }
+        input { width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
+        .img-box { position: relative; border: 1px solid #eee; padding: 10px; text-align: center; border-radius: 4px; background: #fff; }
+        .img-box img { max-width: 100%; height: auto; }
+        .dim-inputs { display: flex; justify-content: space-around; margin-top: 10px; }
+        .soft-foot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+        th { background-color: #f8f9fa; color: var(--primary-color); font-size: 12px; }
+        canvas { width: 100%; height: 120px; border: 1px solid #ccc; background: #fafafa; }
+        .no-print { display: flex; gap: 10px; justify-content: center; margin-top: 30px; }
+        .btn { padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .btn-pdf { background-color: #c0392b; color: white; }
-        .btn-print { background-color: var(--primary-color); color: white; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); opacity: 0.9; }
-
-        @media print {
-            .no-print { display: none; }
-            body { padding: 0; background: white; }
-            .container { box-shadow: none; border: none; width: 100%; padding: 10px; }
-            input { border: 1px solid #eee; }
-        }
+        @media print { .no-print { display: none; } body { padding: 0; } .container { box-shadow: none; width: 100%; } }
     </style>
 </head>
 <body>
 
 <div class="container" id="report-content">
     <div class="header">
-        <img src="https://raw.githubusercontent.com/Gold-Redutores/alinhamento-laser/refs/heads/main/logo.png" alt="Gold Soluções e Serviços" class="logo-gold">
+        <img src="https://raw.githubusercontent.com/Gold-Reformes/alinhamento-laser/main/logo.png" alt="Gold Soluções" class="logo-gold">
         <h1>Relatório de Alinhamento a Laser</h1>
     </div>
 
     <div class="grid">
-        <div class="field-group">
-            <label>Cliente / Unidade</label>
-            <input type="text" placeholder="Ex: ENFIL S/A / KLABIN">
+        <div>
+            <label>Cliente / Local</label>
+            <input type="text" value="ETE-KLABIN / ORTIGUEIRA">
             <label>Equipamento / TAG</label>
-            <input type="text" placeholder="Ex: 36112-P-2139">
-            <label>Fabricante (Motor/Acionado)</label>
-            <input type="text" placeholder="Ex: WEG / ANDRITZ">
+            <input type="text" value="36112-P-2139">
         </div>
-        <div class="field-group">
-            <label>Data da Execução</label>
-            <input type="date">
+        <div>
             <label>Técnico Responsável</label>
-           <input type="text" value="ANDRE MAURICIO">
-            <label>Rotação (RPM)</label>
-            <input type="number" placeholder="Ex: 1750">
+            <input type="text" value="ANDRE MAURICIO">
+            <label>Data</label>
+            <input type="date" id="data-atual">
         </div>
     </div>
 
-    <h3>1. Leituras Finais de Acoplamento</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Posição da Medição</th>
-                <th>Radial / Offset (mm)</th>
-                <th>Angular / Gap (mm)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Vertical (0° - 180°)</strong></td>
-                <td><input type="text" placeholder="Ex: 0.09"></td>
-                <td><input type="text" placeholder="Ex: 0.08"></td>
-            </tr>
-            <tr>
-                <td><strong>Horizontal (90° - 270°)</strong></td>
-                <td><input type="text" placeholder="Ex: 0.09"></td>
-                <td><input type="text" placeholder="Ex: 0.10"></td>
-            </tr>
-        </tbody>
-    </table>
+    <h3>Configuração</h3>
+    <div class="config-grid">
+        <div class="img-box">
+            <label>Dimensões do Equipamento (mm)</label>
+            <img src="https://raw.githubusercontent.com/Gold-Reformes/alinhamento-laser/main/dimensoes_maq.png" alt="Dimensões A B C">
+            <div class="dim-inputs">
+                <div><label>A</label><input type="number" placeholder="mm"></div>
+                <div><label>B</label><input type="number" placeholder="mm"></div>
+                <div><label>C</label><input type="number" placeholder="mm"></div>
+            </div>
+        </div>
 
-    <h3>2. Compensação de Pés (Shims / Calços)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Localização do Pé</th>
-                <th>Qtd. de Calços</th>
-                <th>Espessura Total (mm)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>Pé 1 (Frontal Esquerdo)</td><td><input type="number"></td><td><input type="text" placeholder="Ex: 3.20"></td></tr>
-            <tr><td>Pé 2 (Frontal Direito)</td><td><input type="number"></td><td><input type="text" placeholder="Ex: 3.30"></td></tr>
-            <tr><td>Pé 3 (Traseiro Esquerdo)</td><td><input type="number"></td><td><input type="text" placeholder="Ex: 3.20"></td></tr>
-            <tr><td>Pé 4 (Traseiro Direito)</td><td><input type="number"></td><td><input type="text" placeholder="Ex: 3.30"></td></tr>
-        </tbody>
-    </table>
-
-    <div class="photo-section">
-        <label>📸 Registrar Foto do Serviço (Câmera ou Galeria)</label>
-        <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
-        <img id="preview" src="" alt="Evidência do Alinhamento">
+        <div class="img-box">
+            <label>Correção de Pé Manco (Soft Foot)</label>
+            <img src="https://raw.githubusercontent.com/Gold-Reformes/alinhamento-laser/main/pe_manco.png" alt="Esquema Pé Manco">
+            <div class="soft-foot-grid">
+                <input type="number" placeholder="Pé 1 (mm)">
+                <input type="number" placeholder="Pé 2 (mm)">
+                <input type="number" placeholder="Pé 3 (mm)">
+                <input type="number" placeholder="Pé 4 (mm)">
+            </div>
+        </div>
     </div>
 
-    <h3 style="background-color: #7f8c8d;">3. Observações e Laudo Final</h3>
-    <textarea rows="4" placeholder="Descreva as condições encontradas, correções efetuadas e o laudo de aprovação..."></textarea>
+    <h3>1. Leituras de Alinhamento (Acoplamento)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Posição</th>
+                <th>Radial / Offset (B)</th>
+                <th>Angular (A)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>0° (Vertical)</strong></td><td><input type="number" step="0.01" value="0.09"></td><td><input type="number" step="0.01" value="0.08"></td></tr>
+            <tr><td><strong>90° (Horizontal)</strong></td><td><input type="number" step="0.01" value="0.09"></td><td><input type="number" step="0.01" value="0.10"></td></tr>
+        </tbody>
+    </table>
+
+    <h3>2. Compensação de Pés e Calços (Shims)</h3>
+    <table>
+        <thead>
+            <tr><th>Pé</th><th>Qtd Shims</th><th>Espessura Total (mm)</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>PÉ 1</td><td><input type="number" value="3"></td><td><input type="number" step="0.01" value="3.20"></td></tr>
+            <tr><td>PÉ 2</td><td><input type="number" value="4"></td><td><input type="number" step="0.01" value="3.30"></td></tr>
+            <tr><td>PÉ 3</td><td><input type="number" value="3"></td><td><input type="number" step="0.01" value="3.20"></td></tr>
+            <tr><td>PÉ 4</td><td><input type="number" value="4"></td><td><input type="number" step="0.01" value="3.30"></td></tr>
+        </tbody>
+    </table>
+
+    <div class="grid" style="margin-top:20px;">
+        <div>
+            <label>Observações e Laudo</label>
+            <textarea rows="4"></textarea>
+        </div>
+        <div>
+            <label>Assinatura do Cliente</label>
+            <canvas id="signature-pad"></canvas>
+            <button class="btn" style="font-size:10px; padding:5px;" onclick="signaturePad.clear()">Limpar</button>
+        </div>
+    </div>
 </div>
 
 <div class="no-print">
-    <button class="btn btn-print" onclick="window.print()">Imprimir Relatório</button>
-    <button class="btn btn-pdf" onclick="generatePDF()">Salvar PDF Profissional</button>
+    <button class="btn btn-pdf" onclick="generatePDF()">Gerar Relatório em PDF</button>
 </div>
 
 <script>
-    function previewImage(event) {
-        const reader = new FileReader();
-        reader.onload = function(){
-            const output = document.getElementById('preview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-
+    document.getElementById('data-atual').valueAsDate = new Date();
+    const canvas = document.getElementById('signature-pad');
+    const signaturePad = new SignaturePad(canvas);
+    
     function generatePDF() {
         const element = document.getElementById('report-content');
-        const opt = {
-            margin: 8,
-            filename: 'Relatorio_Alinhamento_Gold.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
+        html2pdf().set({ margin: 5, filename: 'Relatorio_Gold.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' } }).from(element).save();
     }
 </script>
-
 </body>
 </html>
-
-
-
