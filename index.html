@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Alinhamento SKF/PSN</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --primary-color: #003366; --bg-color: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; }
+        .container { max-width: 850px; background: white; padding: 40px; margin: auto; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary-color); padding-bottom: 10px; margin-bottom: 20px; }
+        h1 { color: var(--primary-color); margin: 0; font-size: 24px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        label { font-weight: bold; font-size: 12px; color: #555; display: block; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: center; font-size: 13px; }
+        th { background-color: #eee; }
+        .photo-section { border: 2px dashed #ccc; padding: 20px; text-align: center; margin-top: 20px; border-radius: 5px; }
+        #preview { max-width: 100%; height: auto; margin-top: 10px; display: none; border-radius: 5px; }
+        .no-print { display: flex; gap: 10px; justify-content: center; margin-top: 30px; padding-bottom: 50px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-pdf { background-color: #d32f2f; color: white; }
+        .btn-print { background-color: var(--primary-color); color: white; }
+        .btn:hover { opacity: 0.8; }
+
+        @media print {
+            .no-print { display: none; }
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; border: none; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="conteudo-relatorio">
+    <div class="header">
+        <h1>Relatório de Alinhamento</h1>
+        <div style="text-align: right; font-size: 12px;"><strong>REF:</strong> SKF-TKSA-20 [cite: 55, 60]</div>
+    </div>
+
+    <div class="grid">
+        <div>
+            <label>Equipamento / Posição [cite: 1]</label>
+            <input type="text" id="eq">
+            <label>Operador [cite: 2]</label>
+            <input type="text" id="op">
+            <label>Data [cite: 3]</label>
+            <input type="date" id="dt">
+        </div>
+        <div>
+            <label>Máquina Estacionária [cite: 4]</label>
+            <input type="text">
+            <label>Máquina Móvel [cite: 6]</label>
+            <input type="text">
+            <label>Velocidade (RPM) [cite: 7]</label>
+            <input type="number">
+        </div>
+    </div>
+
+    <h3>Resultados de Medição (Altura/Vertical) [cite: 22]</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Referência [cite: 14]</th>
+                <th>Acoplamento [cite: 23]</th>
+                <th>Posição dos Pés [cite: 31]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Vertical (Height) [cite: 22]</td>
+                <td><input type="text" placeholder="mm"></td>
+                <td><input type="text" placeholder="mm"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Resultados de Medição (Lateral/Sideways) [cite: 27]</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Referência</th>
+                <th>Acoplamento [cite: 27]</th>
+                <th>Posição dos Pés [cite: 34]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Lateral (Sideways)</td>
+                <td><input type="text" placeholder="mm"></td>
+                <td><input type="text" placeholder="mm"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="photo-section">
+        <label>Anexar Foto do Alinhamento (Câmera/Galeria)</label>
+        <input type="file" id="fotoInput" accept="image/*" onchange="mostrarFoto(event)">
+        <img id="preview" src="" alt="Preview">
+    </div>
+
+    <label style="margin-top:20px;">Observações [cite: 49]</label>
+    <textarea rows="3" placeholder="Descreva o desalinhamento remanescente ou notas adicionais..."></textarea>
+</div>
+
+<div class="no-print">
+    <button class="btn btn-print" onclick="window.print()">Imprimir Papel</button>
+    <button class="btn btn-pdf" onclick="gerarPDF()">Salvar em PDF</button>
+</div>
+
+<script>
+    function mostrarFoto(event) {
+        const input = event.target;
+        const reader = new FileReader();
+        reader.onload = function(){
+            const dataURL = reader.result;
+            const output = document.getElementById('preview');
+            output.src = dataURL;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    function gerarPDF() {
+        const elemento = document.getElementById('conteudo-relatorio');
+        const options = {
+            margin: 10,
+            filename: 'Relatorio_Alinhamento.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(options).from(elemento).save();
+    }
+</script>
+
+</body>
+</html>
