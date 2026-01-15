@@ -116,33 +116,36 @@
             <textarea rows="5" style="width:100%; border-radius:4px; border:1px solid #bdc3c7;"></textarea>
         </div>
         <div>
-            <label>Assinatura Digital do Cliente</label>
-            <canvas id="signature-pad"></canvas>
-            <button class="btn" style="font-size:10px; padding:5px; margin-top:5px;" onclick="signaturePad.clear()">Limpar Assinatura</button>
-        </div>
+           
+    <div class="photo-section">
+        <label>📸 Registrar Foto do Serviço (Câmera ou Galeria)</label>
+        <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+        <img id="preview" src="" alt="Evidência do Alinhamento">
     </div>
+
+    <h3 style="background-color: #7f8c8d;">3. Observações e Laudo Final</h3>
+    <textarea rows="4" placeholder="Descreva as condições encontradas, correções efetuadas e o laudo de aprovação..."></textarea>
 </div>
 
 <div class="no-print">
-    <button class="btn btn-pdf" onclick="generatePDF()">Gerar PDF Profissional</button>
+    <button class="btn btn-print" onclick="window.print()">Imprimir Relatório</button>
+    
 </div>
 
 <script>
-    document.getElementById('data-atual').valueAsDate = new Date();
-    const canvas = document.getElementById('signature-pad');
-    const signaturePad = new SignaturePad(canvas);
-    
-    function generatePDF() {
-        const element = document.getElementById('report-content');
-        html2pdf().set({ 
-            margin: 5, 
-            filename: 'Relatorio_Gold_Alinhamento.pdf', 
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 }, 
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-        }).from(element).save();
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const output = document.getElementById('preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
     }
+
+    
 </script>
+
 </body>
 </html>
 
