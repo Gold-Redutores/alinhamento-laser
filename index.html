@@ -1,6 +1,3 @@
-Perfeito! Vou remover a seção relacionada ao "Correção de Pé Manco" do seu código HTML. Aqui está a versão atualizada:
-
-```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -13,38 +10,59 @@ Perfeito! Vou remover a seção relacionada ao "Correção de Pé Manco" do seu 
         :root { --primary-color: #003366; --accent-color: #FFD700; --bg-color: #f4f7f9; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; color: #333; }
         .container { max-width: 900px; background: white; padding: 30px; margin: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+        
+        /* ESTILO DO CABEÇALHO */
         .header { text-align: center; border-bottom: 4px solid var(--accent-color); padding-bottom: 20px; margin-bottom: 20px; }
         .logo-gold { max-width: 250px; height: auto; margin-bottom: 10px; }
         h1 { color: var(--primary-color); margin: 0; font-size: 24px; text-transform: uppercase; text-align: center; width: 100%; }
+        
+        /* ESTILO DOS TÍTULOS DE SEÇÃO */
         h3 { background-color: var(--primary-color); color: white; padding: 10px; font-size: 16px; border-radius: 4px; margin-top: 20px; text-transform: uppercase; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
         label { font-weight: bold; font-size: 11px; color: #666; display: block; margin-bottom: 4px; text-transform: uppercase; }
         input, textarea { width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
         
-        /* Seção de Configuração */
-        .config-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
-        .config-card { border: 1px solid #ddd; padding: 15px; border-radius: 6px; text-align: center; background: #fff; }
-        .config-card img { max-width: 100%; height: auto; max-height: 120px; margin-bottom: 10px; }
-        .dim-fields { display: flex; justify-content: space-around; gap: 5px; }
+        /* CONFIGURAÇÃO DE DIMENSÕES DA MÁQUINA */
+        .config-section { display: flex; justify-content: center; margin-top: 15px; }
+        .config-card { border: 1px solid #ddd; padding: 15px; border-radius: 6px; text-align: center; background: #fff; width: 100%; max-width: 500px; }
+        .config-card img { max-width: 100%; height: auto; max-height: 150px; margin-bottom: 10px; }
+        .dim-fields { display: flex; justify-content: space-around; gap: 10px; }
         
+        /* TABELAS DE MEDIÇÃO E CALÇOS */
         table { width: 100%; border-collapse: collapse; margin: 15px 0; }
         th, td { border: 1px solid #333; padding: 8px; text-align: center; }
         th { background-color: #f8f9fa; color: var(--primary-color); font-size: 12px; }
         
-        /* Área de Foto e Assinatura */
-        .photo-section { margin-top: 20px; text-align: center; border: 2px dashed #ccc; padding: 15px; }
-        #preview { max-width: 100%; max-height: 300px; display: none; margin: 10px auto; border-radius: 5px; }
+        /* SEÇÃO DE FOTO CENTRALIZADA */
+        .photo-section { 
+            margin-top: 20px; 
+            text-align: center; 
+            border: 2px dashed #ccc; 
+            padding: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #preview { 
+            max-width: 100%; 
+            max-height: 400px; 
+            display: none; 
+            margin: 15px auto; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
         
-        textarea { min-height: 180px; resize: vertical; } /* Área maior para condições */
+        textarea { min-height: 180px; resize: vertical; }
 
+        /* ÁREA DE ASSINATURA */
         .signature-box { margin-top: 20px; text-align: center; }
         canvas { border: 1px solid #ccc; background: #fafafa; width: 100%; height: 120px; max-width: 400px; }
 
         .no-print { display: flex; gap: 10px; justify-content: center; margin-top: 30px; padding-bottom: 40px; }
         .btn { padding: 14px 28px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; }
         .btn-print { background-color: var(--primary-color); }
-        .btn-pdf { background-color: #c0392b; }
         
         @media print { .no-print { display: none !important; } body { padding: 0; background: white; } .container { box-shadow: none; border: none; width: 100%; } }
     </style>
@@ -52,6 +70,7 @@ Perfeito! Vou remover a seção relacionada ao "Correção de Pé Manco" do seu 
 <body>
 
 <div class="container" id="report-content">
+    
     <div class="header">
         <img src="https://raw.githubusercontent.com/Gold-Redutores/alinhamento-laser/refs/heads/main/logo.png" alt="Gold Soluções" class="logo-gold">
         <h1>Relatório de Alinhamento a Laser</h1>
@@ -115,7 +134,7 @@ Perfeito! Vou remover a seção relacionada ao "Correção de Pé Manco" do seu 
             
     <div class="photo-section">
         <label>📸 Foto do Serviço</label>
-        <input type="file" accept="image/*" onchange="previewImage(event)">
+        <input type="file" accept="image/*" onchange="previewImage(event)" style="margin-top: 10px; max-width: 250px;">
         <img id="preview" src="">
     </div>
 
@@ -127,19 +146,19 @@ Perfeito! Vou remover a seção relacionada ao "Correção de Pé Manco" do seu 
     <div class="signature-box">
         <label>Assinatura do Cliente</label><br>
         <canvas id="signature-pad"></canvas><br>
-        <button type="button" style="font-size: 10px;" onclick="signaturePad.clear()">Limpar Assinatura</button>
+        <button type="button" style="font-size: 10px; margin-top: 5px;" onclick="signaturePad.clear()">Limpar Assinatura</button>
     </div>
 </div>
 
 <div class="no-print">
-    <button class="btn btn-print" onclick="window.print()">Imprimir</button>
+    <button class="btn btn-print" onclick="window.print()">Imprimir / Gerar PDF</button>
 </div>
 
 <script>
-    // Data automática
+    // Define a data do input para o dia atual automaticamente
     document.getElementById('data-atual').valueAsDate = new Date();
 
-    // Controle da foto
+    // Função para ler o arquivo de imagem e exibir no preview centralizado
     function previewImage(event) {
         const reader = new FileReader();
         reader.onload = function(){
@@ -150,16 +169,10 @@ Perfeito! Vou remover a seção relacionada ao "Correção de Pé Manco" do seu 
         reader.readAsDataURL(event.target.files[0]);
     }
 
-    // Controle da Assinatura
+    // Inicialização da biblioteca de assinatura
     const canvas = document.getElementById('signature-pad');
     const signaturePad = new SignaturePad(canvas);
 </script>
 
 </body>
 </html>
-```
-
-### Alterações Realizadas:
-- A seção "Correção de Pé Manco (mm)" foi removida junto com os campos e imagens associadas.
-
-Se precisar de mais alterações ou quiser adicionar algo, é só avisar!
