@@ -245,6 +245,8 @@
             margin-top: 5px;
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
         .photo-preview-container img {
@@ -252,6 +254,10 @@
             max-height: 150px;
             border: 1px solid #ddd;
             display: none;
+            object-fit: cover;
+            border-radius: 2px;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
         /* Botões de controle no topo/rodapé fora da impressão */
@@ -278,13 +284,19 @@
             body { padding: 0; }
             .report-container { border: 2px solid #000; }
             input, textarea, select { background: transparent !important; }
+            .photo-preview-container img {
+                display: block !important;
+                max-width: 100%;
+                max-height: 180px;
+                margin: 6px auto;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="no-print">
-    <button class="btn" onclick="window.print()">Imprimir / Gerar PDF</button>
+    <button class="btn" onclick="gerarPdf()">Imprimir / Gerar PDF</button>
 </div>
 
 <div class="report-container" id="report-content">
@@ -513,11 +525,9 @@
 
     <!-- ANEXAR FOTO DO SERVIÇO -->
     <div class="photo-upload-section">
-        <span class="font-bold" style="font-size: 9px; display: block; margin-bottom: 4px;">📸 ANEXAR FOTO DO SERVIÇO</span>
-        <input type="file" accept="image/*" onchange="previewImage(event)" class="no-print" style="max-width: 250px; margin: 0 auto;">
-        <div class="photo-preview-container">
-            <img id="preview" src="" alt="Prévia da Foto">
-        </div>
+        <span class="font-bold" style="font-size: 9px; display: block; margin-bottom: 4px;">📸 ANEXAR FOTOS DO SERVIÇO</span>
+        <input type="file" accept="image/*" multiple onchange="previewImage(event)" class="no-print" style="max-width: 250px; margin: 0 auto;">
+        <div class="photo-preview-container" id="photo-preview-container"></div>
     </div>
 
     <!-- OBSERVAÇÕES -->
@@ -573,41 +583,84 @@
 </div>
 
 <div class="no-print" style="margin-bottom: 30px;">
-    <button class="btn" onclick="window.print()">Imprimir / Gerar PDF</button>
+    <button class="btn" onclick="gerarPdf()">Imprimir / Gerar PDF</button>
 </div>
 
 <script>
-    // Inicializar data atual
-    document.getElementById('data-aprovacao').valueAsDate = new Date();
+    function gerarPdf() {
+        const element = document.getElementById('report-content');
+        if (!element) {
+            window.print();
+            return;
+        }
 
-    // Manipulação da prévia da imagem anexada
-    function previewImage(event) {
-        const reader = new FileReader();
-        reader.onload = function(){
-            const output = document.getElementById('preview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
+        if (typeof html2pdf !== 'undefined') {
+            const opt = {
+                margin: 0.15,
+                filename: 'relatorio-alinhamento.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        } else {
+            window.print();
+        }
     }
 
-    // Inicialização do SignaturePad para cada campo de assinatura
-    const canvasComissao = document.getElementById('signature-pad-comissao');
-    const padComissao = new SignaturePad(canvasComissao);
+    // Inicializar data atual, quando o campo existir
+    const dataAprovacao = document.getElementById('data-aprovacao');
+    if (dataAprovacao) {
+        dataAprovacao.valueAsDate = new Date();
+    }
 
+    // Manipulação da prévia das imagens anexadas
+    function previewImage(event) {
+        const container = document.getElementById('photo-preview-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        const files = Array.from(event.target.files || []);
+
+        files.forEach((file, index) => {
+            if (!file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = function () {
+                const img = document.createElement('img');
+                img.src = reader.result;
+                img.alt = 'Prévia da Foto ' + (index + 1);
+                img.style.display = 'block';
+                container.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Inicialização do SignaturePad para cada campo de assinatura, quando existir
+    const canvasComissao = document.getElementById('signature-pad-comissao');
     const canvasAprovacao = document.getElementById('signature-pad-aprovacao');
-    const padAprovacao = new SignaturePad(canvasAprovacao);
+    let padComissao = null;
+    let padAprovacao = null;
+
+    if (canvasComissao && typeof SignaturePad !== 'undefined') {
+        padComissao = new SignaturePad(canvasComissao);
+    }
+    if (canvasAprovacao && typeof SignaturePad !== 'undefined') {
+        padAprovacao = new SignaturePad(canvasAprovacao);
+    }
 
     // Ajustar tamanho dos canvas para que fiquem responsivos e funcionem corretamente ao toque
     function resizeCanvas() {
         [canvasComissao, canvasAprovacao].forEach(canvas => {
+            if (!canvas) return;
             const ratio = Math.max(window.devicePixelRatio || 1, 1);
             canvas.width = canvas.offsetWidth * ratio;
             canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
         });
-        padComissao.clear();
-        padAprovacao.clear();
+        if (padComissao) padComissao.clear();
+        if (padAprovacao) padAprovacao.clear();
     }
 
     window.addEventListener("resize", resizeCanvas);
