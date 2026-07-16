@@ -6,184 +6,581 @@
     <title>Relatório de Alinhamento - Gold Soluções</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-  
     
     <style>
-               .header-container {
-            display: flex;
-            align-items: center; 
-            justify-content: space-between;
-            border-bottom: 3px solid #ed1c24;
-            padding-bottom: 15px;
-            margin-bottom: 10px;
+        :root {
+            --primary-blue: #1c3d75;
+            --border-color: #000000;
+            --bg-gray: #f2f2f2;
         }
 
-        .brand-logo {
-            max-height: 80px; /* Ajuste o tamanho do logo aqui */
-            width: auto;
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            margin: 0;
+            padding: 10px;
+            color: #000;
+            background-color: #fff;
         }
 
-        .title-area {
-            flex-grow: 1;
+        .report-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 2px solid var(--border-color);
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 6px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 4px 6px;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 10px;
+        }
+
+        th {
+            background-color: var(--bg-gray);
+            font-weight: bold;
             text-align: center;
         }
+
+        input[type="text"], input[type="number"], input[type="date"], select, textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            color: #000;
+            box-sizing: border-box;
+            padding: 2px 0;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            background-color: #ffffdd;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 40px;
+        }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .bg-gray { background-color: var(--bg-gray); }
+        .font-bold { font-weight: bold; }
+
+        /* Estilo Cabeçalho Logo */
+        .header-table td {
+            padding: 4px;
+        }
         
-        /* ESTILO DOS TÍTULOS DE SEÇÃO */
-        h3 { background-color: var(--primary-color); color: white; padding: 10px; font-size: 16px; border-radius: 4px; margin-top: 20px; text-transform: uppercase; }
-        
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-        label { font-weight: bold; font-size: 11px; color: #3010E5; display: block; margin-bottom: 4px; text-transform: uppercase; }
-        input, textarea { width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
-        
-        /* CONFIGURAÇÃO DE DIMENSÕES DA MÁQUINA */
-        .config-section { display: flex; justify-content: center; margin-top: 15px; }
-        .config-card { border: 1px solid #ddd; padding: 15px; border-radius: 6px; text-align: center; background: #fff; width: 100%; max-width: 500px; }
-        .config-card img { max-width: 100%; height: auto; max-height: 150px; margin-bottom: 10px; }
-        .dim-fields { display: flex; justify-content: space-around; gap: 10px; }
-        
-        /* TABELAS DE MEDIÇÃO E CALÇOS */
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
-        th { background-color: #3010E5; color: var(--primary-color); font-size: 12px; }
-        
-        /* SEÇÃO DE FOTO CENTRALIZADA */
-        .photo-section { 
-            margin-top: 20px; 
-            text-align: center; 
-            border: 2px dashed #ccc; 
-            padding: 20px; 
+        .logo-gold {
+            max-height: 50px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .main-title {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .sub-title {
+            font-size: 9px;
+            text-align: center;
+            color: #333;
+            margin-top: 2px;
+        }
+
+        /* Layout em duas colunas (Esquema vs Tabelas) */
+        .flex-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .col-left {
+            width: 48%;
             display: flex;
             flex-direction: column;
+            gap: 8px;
+        }
+
+        .col-right {
+            width: 52%;
+        }
+
+        /* Box de Diagramas */
+        .diagram-box {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+            background-color: #fafafa;
+        }
+
+        .diagram-box label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+
+        .diagram-box img {
+            max-width: 100%;
+            height: auto;
+            max-height: 110px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Campos internos de dimensão sobrepostos/alinhados */
+        .dim-fields {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .dim-input-group {
+            display: flex;
             align-items: center;
+            gap: 3px;
+        }
+
+        .dim-input-group label {
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .dim-input-group input {
+            width: 45px;
+            border-bottom: 1px solid #000;
+            text-align: center;
+        }
+
+        /* Checkbox personalizado */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        /* Assinaturas */
+        .signature-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .signature-col {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            text-align: center;
+        }
+
+        .signature-col label {
+            font-weight: bold;
+            font-size: 8px;
+            text-transform: uppercase;
+            display: block;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2px;
+            margin-bottom: 4px;
+            background-color: var(--bg-gray);
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 55px;
+            background-color: #fafafa;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .btn-clear {
+            font-size: 8px;
+            padding: 1px 4px;
+            margin-top: 2px;
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #999;
+            border-radius: 2px;
+        }
+
+        /* Seção da foto anexada */
+        .photo-upload-section {
+            margin-bottom: 6px;
+            border: 1px solid var(--border-color);
+            padding: 6px;
+            text-align: center;
+        }
+
+        .photo-preview-container {
+            margin-top: 5px;
+            display: flex;
             justify-content: center;
         }
-        #preview { 
-            max-width: 100%; 
-            max-height: 400px; 
-            display: none; 
-            margin: 15px auto; 
-            border-radius: 5px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+        .photo-preview-container img {
+            max-width: 100%;
+            max-height: 150px;
+            border: 1px solid #ddd;
+            display: none;
         }
-        
-        textarea { min-height: 180px; resize: vertical; }
 
-        /* ÁREA DE ASSINATURA */
-        .signature-box { margin-top: 20px; text-align: center; }
-        canvas { border: 1px solid #ccc; background: #fafafa; width: 100%; height: 120px; max-width: 400px; }
+        /* Botões de controle no topo/rodapé fora da impressão */
+        .no-print {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
 
-        .no-print { display: flex; gap: 10px; justify-content: center; margin-top: 30px; padding-bottom: 40px; }
-        .btn { padding: 14px 28px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; }
-        .btn-print { background-color: var(--primary-color); }
-        
-        @media print { .no-print { display: none !important; } body { padding: 0; background: white; } .container { box-shadow: none; border: none; width: 100%; } }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            background-color: var(--primary-blue);
+            font-size: 12px;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { padding: 0; }
+            .report-container { border: 2px solid #000; }
+            input, textarea, select { background: transparent !important; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container" id="report-content">
-    
-    <div class="header">
-        <img src="https://raw.githubusercontent.com/Gold-Redutores/alinhamento-laser/refs/heads/main/logo.png" alt="Gold Soluções" class="logo-gold">
-        <h1>Relatório de Alinhamento a Laser</h1>
-    </div>
-
-    <div class="grid">
-        <div>
-            <label>Cliente / Unidade</label>
-            <input type="text" value="INPASA">
-            <label>Equipamento / TAG</label>
-            <input type="text" placeholder="Ex: 1:40">
-        </div>
-        <div>
-            <label>Técnico Responsável</label>
-            <input type="text" value="ANDRE MAURICIO">
-            <label>Data da Execução</label>
-            <input type="date" id="data-atual">
-        </div>
-    </div>
-
-    <h3>Configuração do Equipamento</h3>
-    <div class="config-section">
-        <div class="config-card">
-            <label>Dimensões da Máquina (mm)</label>
-            <img src="https://raw.githubusercontent.com/Gold-Redutores/alinhamento-laser/refs/heads/main/dimensoes_maq.png" alt="Esquema Dimensões">
-            <div class="dim-fields">
-                <div><label>A</label><input type="number" placeholder="mm"></div>
-                <div><label>B</label><input type="number" placeholder="mm"></div>
-                <div><label>C</label><input type="number" placeholder="mm"></div>
-            </div>
-        </div>
-    </div>
-
-    <h3>Leituras Iniciais (Encontradas)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Posição da Medição</th>
-                <th>Radial / Offset (mm)</th>
-                <th>Angular / Gap (mm)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td><strong>Vertical (0° - 180°)</strong></td><td><input type="number" step="0.01" placeholder="0,00"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-            <tr><td><strong>Horizontal (90° - 270°)</strong></td><td><input type="number" step="0.01" placeholder="0,00"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-        </tbody>
-    </table>
-
-    <h3>Leituras Finais (Acoplamento)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Posição da Medição</th>
-                <th>Radial / Offset (mm)</th>
-                <th>Angular / Gap (mm)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td><strong>Vertical (0° - 180°)</strong></td><td><input type="number" step="0.01" placeholder="0,00"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-            <tr><td><strong>Horizontal (90° - 270°)</strong></td><td><input type="number" step="0.01" placeholder="0,00"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-        </tbody>
-    </table>
-
-    <h3>Calços Instalados (Shims)</h3>
-    <table>
-        <thead>
-            <tr><th>Localização</th><th>Quantidade</th><th>Espessura Total (mm)</th></tr>
-        </thead>
-        <tbody>
-            <tr><td>Pé 1 (Frontal Esq)</td><td><input type="number" placeholder="1"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-            <tr><td>Pé 2 (Frontal Dir)</td><td><input type="number" placeholder="1"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-            <tr><td>Pé 3 (Traseiro Esq)</td><td><input type="number" placeholder="1"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-            <tr><td>Pé 4 (Traseiro Dir)</td><td><input type="number" placeholder="1"></td><td><input type="number" step="0.01" placeholder="0,00"></td></tr>
-        </tbody>
-    </table>
-            
-    <div class="photo-section">
-        <label>📸 Foto do Serviço</label>
-        <input type="file" accept="image/*" onchange="previewImage(event)" style="margin-top: 10px; max-width: 250px;">
-        <img id="preview" src="">
-    </div>
-
-    <h3 style="background-color: #3333FF;">Observações e Laudo Final</h3>
-    <div style="margin-top: 10px;">
-        <textarea placeholder="Descreva as condições encontradas, correções efetuadas e o laudo de aprovação..."></textarea>
-    </div>
-
-    <div class="signature-box">
-        <label>Assinatura do Cliente</label><br>
-        <canvas id="signature-pad"></canvas><br>
-        <button type="button" style="font-size: 10px; margin-top: 5px;" onclick="signaturePad.clear()">Limpar Assinatura</button>
-    </div>
+<div class="no-print">
+    <button class="btn" onclick="window.print()">Imprimir / Gerar PDF</button>
 </div>
 
-<div class="no-print">
-    <button class="btn btn-print" onclick="window.print()">Imprimir / Gerar PDF</button>
+<div class="report-container" id="report-content">
+
+    <!-- CABEÇALHO PRINCIPAL -->
+    <table class="header-table">
+        <tr>
+            <td style="width: 25%; text-align: center;">
+                <img src="https://raw.githubusercontent.com/Gold-Redutores/alinhamento-laser/refs/heads/main/logo.png" alt="Gold Soluções" class="logo-gold">
+            </td>
+            <td style="width: 50%; text-align: center; vertical-align: middle;">
+                <div class="main-title">RELATÓRIO DE ALINHAMENTO A LASER</div>
+                <div class="sub-title">Laser Alignment Report</div>
+            </td>
+            <td style="width: 25%; padding: 0; vertical-align: stretch;">
+                <table style="width: 100%; height: 100%; border: none; margin: 0;">
+                    <tr>
+                        <td style="border: none; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); font-size: 8px; width: 60%; font-weight: bold;">Relatório Nº / Report:</td>
+                        <td style="border: none; border-bottom: 1px solid var(--border-color); font-weight: bold; font-size: 11px;" class="text-center">
+                            <input type="text" style="text-align: center; font-weight: bold;" value="">
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- METADADOS E IDENTIFICAÇÃO -->
+    <table>
+        <tr>
+            <td style="width: 50%;"><span class="font-bold">CLIENTE / Customer:</span><br>
+                <input type="text" placeholder="Nome do Cliente">
+            </td>
+            <td style="width: 50%;" colspan="2"><span class="font-bold">CONTRATO / Contract:</span><br>
+                <input type="text" placeholder="Número do Contrato"
+            </td>
+        </tr>
+        <tr>
+            <td><span class="font-bold">LOCAL DO ENSAIO / Testing Site:</span><br>
+                <input type="text" placeholder="Local do Ensaio">
+            </td>
+            <td style="width: 25%;"><span class="font-bold">DESENHO / Drawing:</span><br>
+                <input type="text" placeholder="Número do Desenho">
+            </td>
+            <td style="width: 25%;"><span class="font-bold">FABRICANTE / Manufacturer:</span><br>
+                <input type="text" placeholder="Nome do Fabricante">
+            </td>
+        </tr>
+        <tr>
+            <td><span class="font-bold">PROCEDIMENTO Nº / Procedure:</span><br>
+                <input type="text" value="ALINHAMENTO DE EIXOS ROTATIVOS A LASER
+                ">
+            </td>
+            <td colspan="2"><span class="font-bold">EQUIPAMENTO / TAG:</span><br>
+                <input type="text" placeholder="Identificação do Equipamento / TAG">
+            </td>
+        </tr>
+    </table>
+
+    <!-- INSTRUMENTOS UTILIZADOS -->
+    <table>
+        <tr class="bg-gray">
+            <td colspan="4" class="font-bold" style="font-size: 9px;">INSTRUMENTOS UTILIZADOS / Instruments Used</td>
+        </tr>
+        <tr>
+            <td style="width: 25%;"><span class="font-bold">IDENTIFICAÇÃO / ID:</span><br><input type="text" value="ALINHADOR LASER"></td>
+            <td style="width: 25%;"><span class="font-bold">DESCRIÇÃO:</span><br><input type="text" placeholder="Descrição do Instrumento"></td>
+            <td style="width: 25%;"><span class="font-bold">IDENTIFICAÇÃO / ID:</span><br><input type="text" value="-"></td>
+            <td style="width: 25%;"><span class="font-bold">DESCRIÇÃO:</span><br><input type="text" value="-"></td>
+        </tr>
+    </table>
+
+    <!-- EXECUÇÃO DOS SERVIÇOS -->
+    <table>
+        <tr>
+            <td style="width: 25%;" class="font-bold">EXECUÇÃO DOS SERVIÇOS:</td>
+            <td>
+                <div class="checkbox-container">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etapa_servico" value="pre"> PRÉ-ALINHAMENTO
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etapa_servico" value="final" checked> ALINHAMENTO FINAL
+                    </label>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- DESCRIÇÃO DOS SERVIÇOS -->
+    <table>
+        <tr class="bg-gray">
+            <td class="font-bold" style="font-size: 9px;">DESCRIÇÃO DOS SERVIÇOS / Services Description</td>
+        </tr>
+        <tr>
+            <td>
+                <textarea rows="2" placeholder="Descreva sucintamente as atividades desenvolvidas de alinhamento..."></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <!-- MEIO: DIAGRAMAS ESQUEMÁTICOS (ESQUERDA) E LEITURAS/CALÇOS (DIREITA) -->
+    <div class="flex-row">
+        
+        <!-- COLUNA ESQUERDA: DIAGRAMAS -->
+        <div class="col-left">
+            <!-- Diagrama Acionador/Acionado -->
+            <div class="diagram-box">
+                <label>Esquema de Acoplamento (1-Acionado / 2-Acionador)</label>
+                <img src="https://raw.githubusercontent.com/Gold-Redutores/alinhamento-laser/refs/heads/main/dimensoes_maq.png" alt="Esquema Acoplamento">
+                
+                <!-- Campos A, B, C abaixo da imagem -->
+                <div class="dim-fields">
+                    <div class="dim-input-group">
+                        <label>A:</label>
+                        <input type="number" placeholder="mm">
+                    </div>
+                    <div class="dim-input-group">
+                        <label>B:</label>
+                        <input type="number" placeholder="mm">
+                    </div>
+                    <div class="dim-input-group">
+                        <label>C:</label>
+                        <input type="number" placeholder="mm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagrama dos Pés de Apoio -->
+            <div class="diagram-box" style="padding: 11px;">
+                <label>Distribuição dos Pés de Apoio (PÉ 1 ao PÉ 4)</label>
+                <div style="display: flex; justify-content: space-around; align-items: center; height: 60px; border: 1px dashed #ccc; background: #fff; font-size: 10px; font-weight: bold; color: #555;">
+                    <div>[ PÉ 1 ] ------- [ PÉ 2 ]</div>
+                    <div>[ PÉ 3 ] ------- [ PÉ 4 ]</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUNA DIREITA: LEITURAS E CALÇOS -->
+        <div class="col-right">
+            
+            <!-- Tabela Leitura (Posição e Valores de Desvio) -->
+            <table style="margin-bottom: 5px;">
+                <thead>
+                    <tr class="bg-gray">
+                        <th colspan="3" style="font-size: 9px;">LEITURA / Measurement Readings</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 40%;">POSIÇÃO</th>
+                        <th style="width: 30%;">Vertical (0° - 180°)</th>
+                        <th style="width: 30%;">Horizontal (90° - 270°)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-center">Radial / Offset (mm)</td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-center">Angular / Gap (mm)</td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Tabela GAP (X) -->
+            <table style="margin-bottom: 5px;">
+                <thead>
+                    <tr class="bg-gray">
+                        <th style="font-size: 9px;">GAP DISTÂNCIA (X)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                <span class="font-bold">Distância Nominal X [mm]:</span>
+                                <input type="number" step="0.1" style="width: 80px; border-bottom: 1px solid #000; text-align: center;" placeholder="Ex: 4.0">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Tabela Calços (Shims) -->
+            <table style="margin-bottom: 0;">
+                <thead>
+                    <tr class="bg-gray">
+                        <th colspan="3" style="font-size: 9px;">ESPESSURA DOS SHIMS (Calços Instalados)</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 30%;">Posição</th>
+                        <th style="width: 30%;">Quantidade</th>
+                        <th style="width: 40%;">Espessura Total (mm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-center">Pé 1 (Frontal Esq)</td>
+                        <td><input type="number" class="text-center" placeholder="0"></td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-center">Pé 2 (Frontal Dir)</td>
+                        <td><input type="number" class="text-center" placeholder="0"></td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-center">Pé 3 (Traseiro Esq)</td>
+                        <td><input type="number" class="text-center" placeholder="0"></td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-center">Pé 4 (Traseiro Dir)</td>
+                        <td><input type="number" class="text-center" placeholder="0"></td>
+                        <td><input type="number" step="0.01" class="text-center" placeholder="0,00"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <!-- ANEXAR FOTO DO SERVIÇO -->
+    <div class="photo-upload-section">
+        <span class="font-bold" style="font-size: 9px; display: block; margin-bottom: 4px;">📸 ANEXAR FOTO DO SERVIÇO</span>
+        <input type="file" accept="image/*" onchange="previewImage(event)" class="no-print" style="max-width: 250px; margin: 0 auto;">
+        <div class="photo-preview-container">
+            <img id="preview" src="" alt="Prévia da Foto">
+        </div>
+    </div>
+
+    <!-- OBSERVAÇÕES -->
+    <table>
+        <tr class="bg-gray">
+            <td class="font-bold" style="font-size: 9px;">OBSERVAÇÕES:</td>
+        </tr>
+        <tr>
+            <td>
+                <textarea rows="2" placeholder="Descreva aqui eventuais anomalias, restrições ou considerações técnicas observadas..."></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <!-- LAUDO E RECOMENDAÇÕES -->
+    <table>
+        <tr>
+            <td style="width: 50%; vertical-align: middle;">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <span class="font-bold">LAUDO FINAL:</span>
+                    <label class="checkbox-item">
+                        <input type="radio" name="laudo_final" value="aprovado" checked> APROVADO
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="laudo_final" value="reprovado"> REPROVADO
+                    </label>
+                </div>
+            </td>
+            <td style="width: 50%;">
+                <span class="font-bold">RECOMENDAÇÃO:</span><br>
+                <input type="text" placeholder="Ex: Monitoramento periódico ou recomendação complementar se necessário.">
+            </td>
+        </tr>
+    </table>
+
+    <!-- SEÇÃO DE ASSINATURAS E DATAS -->
+    <div class="signature-section">
+        <!-- Executante (Técnico) -->
+        <div class="signature-col">
+            <label>AUTORIZAÇÃO E EXECUÇÃO (TÉCNICO)</label>
+            <div style="font-size: 11px; font-weight: bold; margin-top: 10px;">ANDRE MAURICIO</div>
+            <div style="font-size: 9px; color: #555; margin-top: 5px;">Gold Soluções</div>
+            <div class="no-print" style="margin-top: 5px;">
+                <span style="font-size: 9px; color: #777;">Assinatura Digitalizada</span>
+            </div>
+        </div>
+
+       
+
+       
+    </div>
+
+</div>
+
+<div class="no-print" style="margin-bottom: 30px;">
+    <button class="btn" onclick="window.print()">Imprimir / Gerar PDF</button>
 </div>
 
 <script>
-    document.getElementById('data-atual').valueAsDate = new Date();
+    // Inicializar data atual
+    document.getElementById('data-aprovacao').valueAsDate = new Date();
 
+    // Manipulação da prévia da imagem anexada
     function previewImage(event) {
         const reader = new FileReader();
         reader.onload = function(){
@@ -194,8 +591,28 @@
         reader.readAsDataURL(event.target.files[0]);
     }
 
-    const canvas = document.getElementById('signature-pad');
-    const signaturePad = new SignaturePad(canvas);
+    // Inicialização do SignaturePad para cada campo de assinatura
+    const canvasComissao = document.getElementById('signature-pad-comissao');
+    const padComissao = new SignaturePad(canvasComissao);
+
+    const canvasAprovacao = document.getElementById('signature-pad-aprovacao');
+    const padAprovacao = new SignaturePad(canvasAprovacao);
+
+    // Ajustar tamanho dos canvas para que fiquem responsivos e funcionem corretamente ao toque
+    function resizeCanvas() {
+        [canvasComissao, canvasAprovacao].forEach(canvas => {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        });
+        padComissao.clear();
+        padAprovacao.clear();
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    // Pequeno atraso para garantir o cálculo correto de dimensões no carregamento inicial
+    setTimeout(resizeCanvas, 300);
 </script>
 
 </body>
